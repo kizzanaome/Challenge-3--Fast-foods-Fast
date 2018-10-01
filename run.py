@@ -1,7 +1,10 @@
 from app import create_app
 from app.database  import Database
 
-app = create_app('development')
+
+config_name ='development'
+app = create_app(config_name)
+
 db = Database('postgresql://postgres:1460@localhost:5433/fast_food_db')
 
 
