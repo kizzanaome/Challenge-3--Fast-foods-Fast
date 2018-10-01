@@ -45,6 +45,8 @@ class BaseCase(unittest.TestCase):
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
 
         self.assertEqual(response.status_code, 201)
+        self.assertIn('you have succesfully placed order', str(response.data))
+        
 
     def test_get_order_history(self):
         response = self.client.post(
