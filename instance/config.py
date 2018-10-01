@@ -1,4 +1,5 @@
 class BaseConfig:
+    
     DATABASE_URL = 'postgresql://postgres:1460@localhost:5433/fast_food_db'
     DEBUG= True
 
