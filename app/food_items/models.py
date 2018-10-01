@@ -22,8 +22,7 @@ class Food(Database):
         """
             This method receives an object of the
             class, creates and returns a dictionary from the object
-        """
-        
+        """        
         try:
             sql = "INSERT INTO food_items (user_id,food_name,price) VALUES(%s,%s,%s)"
             data = (self.user_id,self.food_name,self.price) 
@@ -33,27 +32,33 @@ class Food(Database):
         except Exception as e:
             raise e
 
-    # def fetch_food_item(self):
-    #     query ="SELECT FROM food_items WHERE food_id =%s"
-    #     self.cur.execute(query, (self.food_id,))
-    #     food = self.cur.fetchone() 
-    #     fd= food[self.food_id]
-    #     return fd
-
-    def fetch_all_food_items(self):
+    
+    @staticmethod
+    def fetch_all_food_items():
         """ Fetches all food_items records from the database"""
+        db = Database(app.config['DATABASE_URL'])
         try:                  
             Sql = ("SELECT * FROM food_items;") 
-            self.cur.execute(Sql)   
-            rows = self.cur.fetchall()                 
+            db.cur.execute(Sql)   
+            rows = db.cur.fetchall()                 
             return rows         
         except (Exception, psycopg2.DatabaseError)as Error:
             raise Error
 
-    # def single_order(self, order_id):
-    #     query= "SELECT * FROM orders WHERE order_id = '{}'".format(order_id)
-    #     self.cur.execute(query)
-    #     oder=self.cur.fetchone()
-    #     return oder
+    @staticmethod
+    def fetch_food_name_and_price():
+        """ Fetches all food_items records from the database"""
+        db = Database(app.config['DATABASE_URL'])
+        try:                  
+            Sql = ("SELECT  food_name, price FROM food_items") 
+            db.cur.execute(Sql)   
+            rows = db.cur.fetchall()  
+            print(rows)               
+            return rows         
+        except (Exception, psycopg2.DatabaseError)as Error:
+            raise Error
+
+
+
                 
 
