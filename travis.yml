@@ -4,14 +4,11 @@ python:
 cache: pip
 install:
   - pip install -r requirements.txt
-
 services:
   - postgresql
-
 before_script:
   - psql -c 'create database fast_food_db;' -U postgres
-
 script: 
-  -python -m pytest && coverage run -m pytest && coverage report
+  - python -m pytest && coverage run -m pytest && coverage report
 after_success:
   - coveralls 
