@@ -1,7 +1,6 @@
 from app import create_app
 from app.database  import Database
 
-
 config_name ='development'
 app = create_app(config_name)
 
