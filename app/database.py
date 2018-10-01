@@ -18,20 +18,20 @@ class Database:
         port = parsed_url.port
 
         self.conn = psycopg2.connect(
-            database=db, user= username, password= password,
-            host =hostname, port=port
+            database=db, user=username, password=password,
+            host=hostname, port=port
         )
         self.conn.autocommit = True
         self.cur = self.conn.cursor(cursor_factory=naome.RealDictCursor)
 
     def create_tables(self):
         """method for creating all tables"""
-        commands =(
+        commands = (
             """CREATE TABLE IF NOT EXISTS users(
                 user_id SERIAL PRIMARY KEY,
                 username varchar NOT NULL,
                 password varchar NOT NULL,
-                is_admin BOOLEAN NOT NULL
+                is_admin BOOLEAN DEFAULT FALSE
             )""",
 
             """CREATE TABLE IF NOT EXISTS food_items(
@@ -48,30 +48,32 @@ class Database:
                 quantity INTEGER NOT NULL,
                 location varchar NOT NULL,
                 status varchar NOT NULL,
+                CREATED_AT TEXT NOT NULL DEFAULT TO_CHAR(CURRENT_TIMESTAMP,
+                                                     'YYYY-MM-DD HH:MI:pm'), 
                 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
-                FOREIGN KEY (food_id) REFERENCES food_items(food_id) ON DELETE CASCADE ON UPDATE CASCADE)"""    
+                FOREIGN KEY (food_id) REFERENCES food_items(food_id) ON DELETE CASCADE ON UPDATE CASCADE)"""
         )
 
         for command in commands:
             print('tables created succesfully')
             self.cur.execute(command)
-  
+
     def fetch_all_users(self):
         """ Fetches all user records from the database"""
-        try:                  
-            Sql = ("SELECT * FROM users;") 
-            self.cur.execute(Sql)   
-            rows = self.cur.fetchall()                 
-            return rows         
+        try:
+            Sql = ("SELECT * FROM users;")
+            self.cur.execute(Sql)
+            rows = self.cur.fetchall()
+            return rows
         except (Exception, psycopg2.DatabaseError)as Error:
             raise Error
 
-    def insert_user_data(self,username, password):
+    def insert_user_data(self, username, password):
         try:
             sql = "INSERT INTO users (username,password) VALUES( %s,%s)"
-            data = (username,password)   
-            self.cur.execute(sql,data)
-            return {'message':'user registered succesfully'},201
+            data = (username, password)
+            self.cur.execute(sql, data)
+            return {'message': 'user registered succesfully'}, 201
         except Exception as e:
             raise e
             # return {'msg':"Username Alrady exists{}".format(e)}
@@ -81,13 +83,12 @@ class Database:
             query = "SELECT * FROM users WHERE username=%s"
             self.cur.execute(query, (username,))
             user = self.cur.fetchone()
-            username =user['username']
+            username = user['username']
             password = user['password']
-            print(username,password)
+            print(username, password)
             return username, password
         except Exception as e:
             return {'msg': 'user not found'}, 404
-        
 
     def drop_table(self, *table_names):
         ''' Drops the tables created '''
