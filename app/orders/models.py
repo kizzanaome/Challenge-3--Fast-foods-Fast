@@ -3,11 +3,10 @@ from flask import current_app as app
 import psycopg2.extras as naome
 import psycopg2
 
-
 class Order(Database):
     """ Class for modeling orders """
 
-    def __init__(self, user_id, food_id,quantity, location, status):
+    def __init__(self, user_id, food_id, quantity, location, status):
         """
             This method acts as a constructor
             for our class, its used to initialise class attributes
@@ -35,8 +34,9 @@ class Order(Database):
         """ Fetches all order records from the database"""
         db = Database(app.config['DATABASE_URL'])
         try:
-            Sql = """SELECT od.order_id, od.quantity, od.status, od.location,
-                     f.food_id, f.food_name from orders as od JOIN food_items as f ON od.food_id=f.food_id;"""   
+            Sql = """SELECT  od.quantity, od.status, od.location, od.CREATED_AT, od.order_id,
+                     f.price, f.food_name, usr.username from orders as od JOIN food_items 
+                     as f ON od.food_id=f.food_id JOIN users as usr ON  od.user_id=usr.user_id;"""
             db.cur.execute(Sql)
             rows = db.cur.fetchall()
             return rows
@@ -44,19 +44,24 @@ class Order(Database):
             raise Error
 
     @staticmethod
-    def fetch_order_history():
+    def order_history():
         db = Database(app.config['DATABASE_URL'])
-        Sql = """SELECT od.order_id, od.quantity, od.status, od.location,
-                    f.food_id, f.food_name from orders as od JOIN food_items as f ON od.food_id=f.food_id;"""   
+        Sql = """SELECT  od.order_id, od.quantity, od.status,od.location,od.CREATED_AT,
+                    f.price, f.food_name, usr.username from orders 
+                    as od JOIN food_items as f ON od.food_id=f.food_id JOIN
+                    users as usr ON od.user_id=usr.user_id;"""
         db.cur.execute(Sql)
         rows = db.cur.fetchall()
         return rows
 
-
     def single_order(self, order_id):
-        query = "SELECT * FROM orders WHERE order_id = '{}'".format(order_id)
-        self.cur.execute(query)
+        query = """SELECT  od.quantity, od.status, od.location, od.CREATED_AT,od.order_id,
+                     f.price, f.food_name, usr.username from orders 
+                     as od JOIN food_items as f ON od.food_id=f.food_id JOIN 
+                     users as usr ON  od.user_id=usr.user_id where order_id ='{}'""".format(order_id)
+        self.cur.execute(query, (order_id))
         oder = self.cur.fetchone()
+        print(oder)
         return oder
 
     @staticmethod
@@ -68,6 +73,18 @@ class Order(Database):
         return fooditem
 
     @staticmethod
+    def fetch_user_by_id(user_id):
+        try:
+            db = Database(app.config['DATABASE_URL'])
+            query = "SELECT * FROM users WHERE user_id=%s"
+            db.cur.execute(query, (user_id,))
+            user = db.cur.fetchone()
+            print(user)
+            return user
+        except Exception as e:
+            return {'msg': 'user not found'}, 404
+
+    @staticmethod
     def fetch_foodname(food_name):
         db = Database(app.config['DATABASE_URL'])
         query = "SELECT * FROM food_items WHERE food_name=%s"
@@ -75,9 +92,13 @@ class Order(Database):
         food = db.cur.fetchone()
         return food
 
-        # self.cur.execute(query, (username,))
-        # user = self.cur.fetchone()
-        # username =user['username']
-        # password = user['password']
-        # print(username,password)
-        # return username, password
+    @staticmethod
+    def update_status(status, order_id):
+        db = Database(app.config['DATABASE_URL'])
+        query = """UPDATE orders
+                SET status = %s
+                WHERE order_id = %s"""
+        db.cur.execute(query, (status, order_id))
+        updated_rows = db.cur.rowcount
+        print(updated_rows)
+        return updated_rows
