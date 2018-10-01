@@ -5,8 +5,7 @@ from app.database  import Database
 config_name ='development'
 app = create_app(config_name)
 
-db = Database('postgresql://postgres:1460@localhost:5433/fast_food_db')
-
+db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
 
 if __name__ == '__main__':
     db.create_tables()

@@ -96,3 +96,6 @@ class Database:
             drop_table = "DROP TABLE IF EXISTS {} CASCADE".format(table_name)
             print('all tables dropped')
             self.cur.execute(drop_table)
+
+
+
