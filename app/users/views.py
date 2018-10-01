@@ -1,16 +1,15 @@
 from flask import jsonify, make_response
-from flask_restful import Resource, reqparse
+from flask_restplus import Resource, reqparse, fields, Api
 from .models import User
 from flask import request
 from werkzeug.security import check_password_hash, generate_password_hash
 import psycopg2
 from app.database import Database
-from flask import current_app as app
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, get_jwt_claims)
 
 
-class Register(Resource):
+class Register(Resource):    
     def get(self):
         try:
             # db = Database(app.config['DATABASE_URL'])
@@ -28,21 +27,44 @@ class Register(Resource):
             parser.add_argument('username', type=str,
                                 required=True, help="This field is required")
             parser.add_argument('password')
-            parser.add_argument('is_admin')
+            # parser.add_argument('is_admin')
             args = parser.parse_args()
 
             password = generate_password_hash(
                 args['password'], method='sha256')
 
             """creating an insatnce of a user class"""
-            use = User('username', 'password', is_admin=False)
-            create_user = use.insert_user_data(
-                args['username'], password, args['is_admin'])
+            use = User(args['username'], args['password'], is_admin=False)
+            create_user = use.insert_user_data(args['username'], password, is_admin=False)
             if create_user:
                 return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
         except Exception as e:
             raise e
             return {'massage': 'username already exists'}, 400
+
+class AdminSignIn(Resource):
+    def post(self):
+        try:
+            parser = reqparse.RequestParser()
+            parser.add_argument('username', type=str,
+                                required=True, help="This field is required")
+            parser.add_argument('password')
+           
+
+            args = parser.parse_args()
+
+            password = generate_password_hash(
+                args['password'], method='sha256')
+
+            """creating an insatnce of a user class"""
+            use = User(args['username'], args['password'], is_admin=True)
+            create_user = use.insert_user_admin(args['username'], password, is_admin=True)
+            if create_user:
+                return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
+        except Exception as e:
+            raise e
+            return {'massage': 'username already exists'}, 400
+
 
 
 class Login(Resource):
@@ -68,4 +90,6 @@ class Login(Resource):
             user_token["token"] = access_token
             return user_token, 200
         else:
-            return {'message': 'I nvalid credentials'}, 401
+            return {'message': 'Invalid credentials'}, 401
+
+
