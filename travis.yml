@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.4.1"
+services:
+  - postgresql
+cache: pip
+install:
+  - pip install -r requirements.txt
+before_script:
+  - psql -c 'create database fast_food_db;' -U postgres
+script: 
+after_success: coveralls python -m pytest && coverage run -m pytest && coverage report
