@@ -8,7 +8,7 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
 class TestingConfig(BaseConfig):
-    DATABASE_URL = 'postgresql://postgres:1460@localhost:5433/testing_db'
+    DATABASE_URL = 'postgresql://postgres:1460@localhost:5432/testing_db'
     DEBUG = True
     
 
