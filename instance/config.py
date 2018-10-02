@@ -1,6 +1,4 @@
 import os
-
-
 class BaseConfig:
 
     DATABASE_URL = 'postgresql://postgres:1460@localhost:5432/fast_food_db'
