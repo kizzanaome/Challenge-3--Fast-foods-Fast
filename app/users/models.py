@@ -67,7 +67,3 @@ class User(Database):
             return {'msg': 'user not found'}, 404
         
     
-
- 
-
- 
