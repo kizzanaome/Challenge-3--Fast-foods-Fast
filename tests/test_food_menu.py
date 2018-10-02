@@ -115,3 +115,9 @@ class BaseCase(unittest.TestCase):
         response2 = self.client.get('api/v1/orders/1', content_type='application/json', headers={
                                     'Authorization': 'Bearer {}'.format(data['token'])})
         self.assertEqual(response2.status_code, 200)
+
+    def tearDown(self):
+        """method for rearing down the tables whenever a test is completed"""
+        print('------Tearingdown----------------------')
+        self.db.drop_table('users','orders','food_items')
+

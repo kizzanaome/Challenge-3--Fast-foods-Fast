@@ -26,7 +26,7 @@ class BaseCase(unittest.TestCase):
 
     def test_place_an_order(self):
         response = self.client.post(
-            'api/v1/auth/signup', data=json.dumps(user), content_type='application/json')
+            'api/v1/auth/asignup', data=json.dumps(user), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('you have succesfully signed up', str(response.data))
 
@@ -36,11 +36,11 @@ class BaseCase(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
 
-        response = self.client.get('api/v1/menu', content_type='application/json', headers={
-                                   'Authorization': 'Bearer {}'.format(data['token'])})
+        response = self.client.post('api/v1/menu', data=json.dumps(menu), content_type='application/json',
+                                    headers={'Authorization': 'Bearer {}'.format(data['token'])})
 
-        self.assertEqual(response.status_code, 200)
-
+        self.assertEqual(response.status_code, 201)
+        
         response = self.client.post('api/v1/users/orders', data=json.dumps(order), content_type='application/json',
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
 
@@ -50,7 +50,7 @@ class BaseCase(unittest.TestCase):
 
     def test_get_order_history(self):
         response = self.client.post(
-            'api/v1/auth/signup', data=json.dumps(user), content_type='application/json')
+            'api/v1/auth/asignup', data=json.dumps(user), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('you have succesfully signed up', str(response.data))
 
@@ -59,6 +59,11 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
+
+        response = self.client.post('api/v1/menu', data=json.dumps(menu), content_type='application/json',
+                                    headers={'Authorization': 'Bearer {}'.format(data['token'])})
+
+        self.assertEqual(response.status_code, 201)
 
         response = self.client.post('api/v1/users/orders', data=json.dumps(order), content_type='application/json',
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
@@ -69,3 +74,9 @@ class BaseCase(unittest.TestCase):
                                    'Authorization': 'Bearer {}'.format(data['token'])})
 
         self.assertEqual(response.status_code, 200)
+
+    def tearDown(self):
+        """method for rearing down the tables whenever a test is completed"""
+        print('------Tearingdown----------------------')
+        self.db.drop_table('users','orders','food_items')
+

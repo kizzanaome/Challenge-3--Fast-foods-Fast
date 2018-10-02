@@ -56,8 +56,6 @@ class BaseCase(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
 
-    
-
     def tearDown(self):
         """method for rearing down the tables whenever a test is completed"""
         print('------Tearingdown----------------------')
