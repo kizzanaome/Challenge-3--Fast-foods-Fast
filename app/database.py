@@ -90,6 +90,7 @@ class Database:
         except Exception as e:
             return {'msg': 'user not found'}, 404
 
+        
     def drop_table(self, *table_names):
         ''' Drops the tables created '''
         for table_name in table_names:

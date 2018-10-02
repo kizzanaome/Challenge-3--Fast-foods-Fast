@@ -10,7 +10,6 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
     DB = 'fast_food_db'
 
-
 class TestingConfig(BaseConfig):
     if os.getenv('TRAVIS'):
         DATABASE_URL = 'postgres://postgres@localhost/testing_db'
@@ -21,9 +20,9 @@ class TestingConfig(BaseConfig):
     DB = 'testing_db'
 
 class ProductionConfig(BaseConfig):
-    Debug = False
-    DATABASE_URL = 'postgres://cnvubaunffnlsa:2639efa048a47a8de9efa076d2912fe6a7de075896b82ef48971bf4f799830b4@ec2-54-221-225-11.compute-1.amazonaws.com:5432/d35aprkl2ds50e'
-
+        os.getenv('FLASK_ENV')
+        Debug = False
+        DATABASE_URL = 'postgres://cnvubaunffnlsa:2639efa048a47a8de9efa076d2912fe6a7de075896b82ef48971bf4f799830b4@ec2-54-221-225-11.compute-1.amazonaws.com:5432/d35aprkl2ds50e'
 
 app_config = {
     "development": DevelopmentConfig,

@@ -27,7 +27,6 @@ class Register(Resource):
             parser.add_argument('username', type=str,
                                 required=True, help="This field is required")
             parser.add_argument('password')
-            # parser.add_argument('is_admin')
             args = parser.parse_args()
 
             password = generate_password_hash(
@@ -35,6 +34,9 @@ class Register(Resource):
 
             """creating an insatnce of a user class"""
             use = User(args['username'], args['password'], is_admin=False)
+            user = use.fetch_user('username')
+            # if user['username']== args['username']:
+            #     return {'message':'user has already been placed'},403
             create_user = use.insert_user_data(args['username'], password, is_admin=False)
             if create_user:
                 return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
@@ -78,7 +80,10 @@ class Login(Resource):
         password = data['password']
         use = User('username', 'password')
 
-        """read from database to find the user and then check the password"""
+        """
+            read from database to find the user and then check the password
+        
+        """
 
         user = use.fetch_user(username)
         print(user)

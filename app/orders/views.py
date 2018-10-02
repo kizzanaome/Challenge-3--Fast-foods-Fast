@@ -17,7 +17,6 @@ class OrderList(Resource):
                 return {"msg": "You have not orderd for any food so you have no order history"}, 200 
             return make_response(jsonify({"Your order History": orders}),200)  
 
-
     @jwt_required
     def post(self):
         current_user = get_jwt_identity()
@@ -47,14 +46,16 @@ class OrderList(Resource):
             """creating an insatnce of an order class"""
             print(current_user)
             order = Order(current_user,fd['food_id'],args['quantity'], args['location'],status)
-            create_order=order.insert_order_data ()
+            select_order=order.fetch_food_id(fd['food_id'])   
+            if select_order:
+                    return {'message':'Order has already been placed'},403
+            create_order=order.insert_order_data()
             if create_order:
                 return make_response(jsonify({'massege':"you have succesfully placed order"}),201)
             return {"msg": "Order not placed succesfully"}, 
         return {"msg": "food_item doesnt exist on the food menu"}, 400
 
 
-  
 class SingleOrder(Resource):
     @jwt_required
     @admin_only

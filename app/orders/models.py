@@ -102,3 +102,12 @@ class Order(Database):
         updated_rows = db.cur.rowcount
         print(updated_rows)
         return updated_rows
+
+    @staticmethod
+    def fetch_food_id(food_id):
+        db = Database(app.config['DATABASE_URL'])
+        query = "SELECT * FROM orders WHERE food_id=%s"
+        db.cur.execute(query, (food_id,))
+        orders = db.cur.fetchone()
+        return orders
+

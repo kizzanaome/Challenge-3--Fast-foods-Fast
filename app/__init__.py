@@ -1,12 +1,15 @@
 from flask import Flask, render_template, jsonify
 from instance.config import app_config
 from flask_restplus import Api
+import os
 
 def create_app(config_name):
     app = Flask(__name__,instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
-    
+
+    env = os.getenv('FLASK_ENV')
+
     api = Api(app, prefix='/api/v2', version='2.0',
             title='fsf', description='food delivery api')
         
