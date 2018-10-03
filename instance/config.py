@@ -5,7 +5,6 @@ class BaseConfig:
     DEBUG = True
     DB = 'fast_food_db'
 
-
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     DB = 'fast_food_db'
