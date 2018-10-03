@@ -76,8 +76,7 @@ class Database:
             return {'message': 'user registered succesfully'}, 201
         except Exception as e:
             raise e
-            # return {'msg':"Username Alrady exists{}".format(e)}
-
+            
     def fetch_user(self, username):
         try:
             query = "SELECT * FROM users WHERE username=%s"
