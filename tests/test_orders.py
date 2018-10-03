@@ -6,7 +6,6 @@ from app.orders.models import Order
 from app.database import Database
 from .test_data import *
 
-
 class BaseCase(unittest.TestCase):
     """class holds all the unittests for the app"""
 
@@ -15,7 +14,6 @@ class BaseCase(unittest.TestCase):
             This method is run at the begining of each test
             also initialises the client where tests will be run
         """
-
         config_name = 'testing'
         self.app = create_app(config_name)
         self.app_context = self.app.app_context()
@@ -24,55 +22,38 @@ class BaseCase(unittest.TestCase):
         self.db.create_tables()
         self.client = self.app.test_client()
 
+    """This methods tests for placing an order end point """
     def test_place_an_order(self):
         response = self.client.post(
             'api/v1/auth/asignup', data=json.dumps(user), content_type='application/json')
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('you have succesfully signed up', str(response.data))
-
         response = self.client.post(
             'api/v1/auth/login', data=json.dumps(user), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
-
         response = self.client.post('api/v1/menu', data=json.dumps(menu), content_type='application/json',
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
-
         self.assertEqual(response.status_code, 201)
-        
         response = self.client.post('api/v1/users/orders', data=json.dumps(order), content_type='application/json',
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
-
         self.assertEqual(response.status_code, 201)
         self.assertIn('you have succesfully placed order', str(response.data))
         
 
-    def test_get_order_history(self):
+    def test_get_order_history_doesnt_exist(self):
         response = self.client.post(
             'api/v1/auth/asignup', data=json.dumps(user), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('you have succesfully signed up', str(response.data))
-
         response = self.client.post(
             'api/v1/auth/login', data=json.dumps(user), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
-
         response = self.client.post('api/v1/menu', data=json.dumps(menu), content_type='application/json',
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
-
-        self.assertEqual(response.status_code, 201)
-
         response = self.client.post('api/v1/users/orders', data=json.dumps(order), content_type='application/json',
                                     headers={'Authorization': 'Bearer {}'.format(data['token'])})
-
-        self.assertEqual(response.status_code, 201)
-
         response = self.client.get('api/v1/menu', content_type='application/json', headers={
                                    'Authorization': 'Bearer {}'.format(data['token'])})
-
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):

@@ -1,11 +1,9 @@
 user = {
     'username': 'naome',
     'password': 'naome'
-
 }
 
 menu = {
-
     'food_name': 'pizza',
     'price': 2000
 }
