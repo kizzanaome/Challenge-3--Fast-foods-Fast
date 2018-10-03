@@ -43,6 +43,17 @@ class User(Database):
         except Exception as e:
             return {'msg': 'user not found'}, 404
 
+    
+    def check_user(self, username):
+        query = "SELECT * FROM users WHERE username=%s"
+        self.cur.execute(query, (username,))
+        user = self.cur.fetchone()
+        print(user)
+        if user:
+            return True
+        return False
+
+
     def fetch_all_users(self):
         """ Fetches all user records from the database"""
         try:                  
