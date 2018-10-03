@@ -58,6 +58,15 @@ class Food(Database):
         except (Exception, psycopg2.DatabaseError)as Error:
             raise Error
 
+    def check_food_name(self, food_name):
+        query = "SELECT * FROM food_items WHERE food_name=%s"
+        self.cur.execute(query, (food_name,))
+        user = self.cur.fetchone()
+        print(user)
+        if user:
+            return True
+        return False
+
 
 
                 
