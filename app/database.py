@@ -8,7 +8,6 @@ import psycopg2.extras as naome
 
 class Database:
     """This class connects to the database"""
-
     def __init__(self, database_url):
         parsed_url = urlparse(database_url)
         db = parsed_url.path[1:]
