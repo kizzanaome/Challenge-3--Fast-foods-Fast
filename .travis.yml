@@ -12,3 +12,5 @@ before_script:
   - psql -c 'create database testing_db;' -U postgres
 script: 
   - python -m pytest && coverage run -m pytest && coverage report
+after_succes:
+  - coveralls
