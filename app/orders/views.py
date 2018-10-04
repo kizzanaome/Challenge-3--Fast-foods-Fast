@@ -44,12 +44,12 @@ class OrderList(Resource):
         if not args['food_name']:
             return make_response(jsonify({"message":
                                           "Add food_name"}),
-                                 401)
+                                 400)
 
         if args['location'] == "":
             return make_response(jsonify({"message":
                                           "Add location"}),
-                                 401)
+                                 400)
             
         if re.compile('[   text]').match(args['food_name']):
             return {'message': 'Please avoid adding spaces before characters'}, 400
@@ -78,7 +78,7 @@ class OrderList(Resource):
             if create_order:
                 return make_response(jsonify({'massege':"you have succesfully placed order"}),201)
             return {"msg": "Order not placed succesfully"}, 
-        return {"msg": "food_item doesnt exist on the food menu"}, 400
+        return {"msg": "food_item doesnt exist on the food menu"}, 404
 
 
 class SingleOrder(Resource):
@@ -104,7 +104,7 @@ class SingleOrder(Resource):
         if not args['status']:
             return make_response(jsonify({"message":
                                           "Add status"}),
-                                 401)
+                                 400)
         if re.compile('[   text]').match(args['status']):
             return {'message': 'Please avoid adding spaces before characters'}, 400
         update_status= Order.update_status(status, order_id)

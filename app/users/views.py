@@ -14,7 +14,6 @@ from flask_jwt_extended import (
 class Register(Resource):
     def get(self):
         try:
-            # db = Database(app.config['DATABASE_URL'])
             use = User('username', 'password')
             rows = use.fetch_all_users()
             if rows == True:
@@ -33,9 +32,9 @@ class Register(Resource):
             password = generate_password_hash(
                 args['password'], method='sha256')
             if not args['username']:
-                return make_response(jsonify({"message":"Username field is required"}), 401)                  
-            if not args['password']:
-                return make_response(jsonify({"message":"Password field is required"}),401)
+                return make_response(jsonify({"message":"Username field is required"}), 400) 
+            if re.compile('^[1234567890]+$').match(args['username']):
+                return make_response(jsonify({"message":"This field is a string"}), 400) 
             if re.compile('[   text]').match(args['username']):
                 return {'message': 'Please avoid adding spaces before characters'}, 400
 
@@ -125,7 +124,6 @@ class Login(Resource):
         username = data['username']
         password = data['password']
         use = User('username', 'password')
-
         if not data['username']:
                 return make_response(jsonify({"message":
                                               "Username field is required"}),

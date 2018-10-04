@@ -40,9 +40,9 @@ class FoodItems(Resource):
         args = parser.parse_args()
 
         if not args['food_name']:
-            return make_response(jsonify({"message": "Add food_name"}),401)       
+            return make_response(jsonify({"message": "Add food_name"}),400)       
         if args['price'] == "":
-            return make_response(jsonify({"message":"Add price"}),401) 
+            return make_response(jsonify({"message":"Add price"}),400) 
         if re.compile('[   text]').match(args['food_name']):
             return {'message': 'Please avoid adding spaces before characters'}, 400
         if re.compile('[!@#$%^&*:;?><.]').match(args['food_name']):
@@ -55,7 +55,7 @@ class FoodItems(Resource):
         food = Food(current_user,args["food_name"].strip(chars), args["price"])
         food_name_exist= food.check_food_name(args['food_name'].strip(chars))
         if food_name_exist:
-            return {'message': 'Food item has alreadly beeen placed'}, 400
+            return {'message': 'Food item has alreadly beeen placed'}, 403
         create_food=food.create_foodItems()
         if create_food:
             return make_response(jsonify({'massege':"you have succesfully placed a food_item"}),201)
