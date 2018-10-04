@@ -1,5 +1,12 @@
 user = {
+    'user_id':1,
     'username': 'naome',
+    'password': 'naome'
+}
+
+invalid_user ={
+    'user_id':1,
+    'username': '',
     'password': 'naome'
 }
 
@@ -14,6 +21,10 @@ order = {
     "location": "kampala"
 }
 
-updated_status = {
-    "status": "Accepted"
+token ={
+    "user_id": 1
+}
+
+updated_status={
+    "status":"Accepted"
 }
