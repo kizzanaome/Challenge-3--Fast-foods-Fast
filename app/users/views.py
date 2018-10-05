@@ -35,14 +35,11 @@ class Register(Resource):
                 return make_response(jsonify({"message":"Username field is required"}), 400) 
             if re.compile('^[1234567890]+$').match(args['username']):
                 return make_response(jsonify({"message":"This field is a string"}), 400) 
-            if re.compile('[   text]').match(args['username']):
+            if ' ' in args['username']:
                 return {'message': 'Please avoid adding spaces before characters'}, 400
 
-            if re.compile('[   text]').match(args['password']):
-                return {'message': 'Please avoid adding spaces before characters'}, 400
-
-            if re.compile('[!@#$%^&*:;?><.]').match(args['username']):
-                return {'message': 'Please dont input symbols'}, 400
+            if ' ' in args['password']:
+                return {'message': 'Please avoid adding spaces before and after characters'}, 400
 
             if len(str(args['username'])) < 4:
                 return {'message': 'username should be more than 4 characters'}, 400
