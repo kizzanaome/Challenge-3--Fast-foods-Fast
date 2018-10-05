@@ -1,6 +1,4 @@
 [![Build Status](https://travis-ci.org/kizzanaome/Fast-foods-Fast-db.svg?branch=ft-challenge3)](https://travis-ci.org/kizzanaome/Fast-foods-Fast-db)
-[![Coverage Status](https://coveralls.io/repos/github/kizzanaome/Fast-Food-Fast/badge.svg?branch=develop)](https://coveralls.io/github/kizzanaome/Fast-Food-Fast?branch=develop)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c45f17847a054f958174c194ce396998)](https://www.codacy.com/app/kizzanaome/Fast-Food-Fast?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kizzanaome/Fast-Food-Fast&amp;utm_campaign=Badge_Grade)
 
 # Fast-foods-Fast-db
 Fast-Food-Fast is a food delivery service app for a restaurant.
