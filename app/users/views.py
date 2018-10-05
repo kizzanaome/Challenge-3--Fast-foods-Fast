@@ -87,7 +87,7 @@ class AdminSignIn(Resource):
             if ' ' in args['password']:
                 return {'message': 'Please avoid adding spaces'}, 400
 
-            if re.compile('^[a-zA-Z]+$').match(args['username']):
+            if not re.compile('^[a-zA-Z]+$').match(args['username']):
                 return {'message': 'Please dont input symbols'}, 400
 
             if len(str(args['username'])) < 4:
@@ -135,7 +135,7 @@ class Login(Resource):
         if ' ' in  data['password']):
             return {'message': 'Please avoid adding spaces'}, 400
 
-        if re.compile('^[a-zA-Z]+$').match(data['username']):
+        if not  re.compile('^[a-zA-Z]+$').match(data['username']):
             return {'message': 'Please dont input symbols'}, 400
 
         if len(str(data['username'])) < 4:
