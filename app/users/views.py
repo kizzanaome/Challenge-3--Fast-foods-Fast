@@ -81,13 +81,13 @@ class AdminSignIn(Resource):
                 return make_response(jsonify({"message":
                                               "Password field is required"}),
                                      401)
-            if re.compile('[   text]').match(args['username']):
-                return {'message': 'Please avoid adding spaces before characters'}, 400
+            if  ' ' in args['username']:
+                return {'message': 'Please avoid adding spaces'}, 400
 
-            if re.compile('[   text]').match(args['password']):
-                return {'message': 'Please avoid adding spaces before characters'}, 400
+            if ' ' in args['password']:
+                return {'message': 'Please avoid adding spaces'}, 400
 
-            if re.compile('[!@#$%^&*:;?><.]').match(args['username']):
+            if re.compile('^[a-zA-Z]+$').match(args['username']):
                 return {'message': 'Please dont input symbols'}, 400
 
             if len(str(args['username'])) < 4:
@@ -129,13 +129,13 @@ class Login(Resource):
             return make_response(jsonify({"message":
                                             "Password field is required"}),
                                     401)
-        if re.compile('[   text]').match(data['username']):
-            return {'message': 'Please avoid adding spaces before characters'}, 400
+        if ' ' in data['username']:
+            return {'message': 'Please avoid adding spaces '}, 400
 
-        if re.compile('[   text]').match(data['password']):
-            return {'message': 'Please avoid adding spaces before characters'}, 400
+        if ' ' in  data['password']):
+            return {'message': 'Please avoid adding spaces'}, 400
 
-        if re.compile('[!@#$%^&*:;?><.]').match(data['username']):
+        if re.compile('^[a-zA-Z]+$').match(data['username']):
             return {'message': 'Please dont input symbols'}, 400
 
         if len(str(data['username'])) < 4:
