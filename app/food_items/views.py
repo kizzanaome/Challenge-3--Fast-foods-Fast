@@ -60,11 +60,3 @@ class FoodItems(Resource):
         if create_food:
             return make_response(jsonify({'massege':"you have succesfully placed a food_item"}),201)
         return {"msg": "food_item not placed succesfully"}, 400
-
-
-
-
-
-
-     
-        
