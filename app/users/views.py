@@ -132,7 +132,7 @@ class Login(Resource):
         if ' ' in data['username']:
             return {'message': 'Please avoid adding spaces '}, 400
 
-        if ' ' in  data['password']):
+        if ' ' in  data['password']:
             return {'message': 'Please avoid adding spaces'}, 400
 
         if not  re.compile('^[a-zA-Z]+$').match(data['username']):
