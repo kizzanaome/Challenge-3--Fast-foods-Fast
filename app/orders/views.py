@@ -54,7 +54,7 @@ class OrderList(Resource):
         if ' ' in args['food_name']:
             return {'message': 'Please avoid adding spaces'}, 400
         
-        if ' ' in args['location']):
+        if ' ' in args['location']:
             return {'message': 'Please avoid adding spaces before characters'}, 400
 
         if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
