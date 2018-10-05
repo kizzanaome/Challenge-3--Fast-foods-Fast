@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kizzanaome/Fast-foods-Fast-db.svg?branch=ft-challenge3)](https://travis-ci.org/kizzanaome/Fast-foods-Fast-db)
+[![Coverage Status](https://coveralls.io/repos/github/kizzanaome/Fast-foods-Fast-db/badge.svg?branch=f3-challenge3)](https://coveralls.io/github/kizzanaome/Fast-foods-Fast-db?branch=f3-challenge3)
 
 # Fast-foods-Fast-db
 Fast-Food-Fast is a food delivery service app for a restaurant.
