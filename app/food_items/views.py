@@ -43,9 +43,9 @@ class FoodItems(Resource):
             return make_response(jsonify({"message": "Add food_name"}),400)       
         if args['price'] == "":
             return make_response(jsonify({"message":"Add price"}),400) 
-        if re.compile('[   text]').match(args['food_name']):
-            return {'message': 'Please avoid adding spaces before characters'}, 400
-        if re.compile('[!@#$%^&*:;?><.]').match(args['food_name']):
+        if ' ' in  args['food_name']:
+            return {'message': 'Please avoid adding spaces '}, 400
+        if not  re.compile('^[a-zA-Z]+$').match(args['food_name']):
             return {'message': 'Please dont input symbols'}, 400
         if len(str(args['food_name'])) < 4:
             return {'message': 'food_name should be more than 4 characters'}, 400
