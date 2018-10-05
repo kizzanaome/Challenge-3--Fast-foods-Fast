@@ -51,13 +51,13 @@ class OrderList(Resource):
                                           "Add location"}),
                                  400)
             
-        if re.compile('[   text]').match(args['food_name']):
-            return {'message': 'Please avoid adding spaces before characters'}, 400
+        if ' ' in args['food_name']:
+            return {'message': 'Please avoid adding spaces'}, 400
         
-        if re.compile('[   text]').match(args['location']):
+        if '  ' args['location']):
             return {'message': 'Please avoid adding spaces before characters'}, 400
 
-        if re.compile('[!@#$%^&*:;?><.]').match(args['food_name']):
+        if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
             return {'message': 'Please dont input symbols'}, 400
 
         if len(str(args['food_name'])) < 4:
