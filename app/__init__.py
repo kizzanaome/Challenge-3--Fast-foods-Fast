@@ -2,20 +2,15 @@ from flask import Flask, render_template, jsonify
 from instance.config import app_config
 from flask_restplus import Api
 import os
+import flasgger
 
 def create_app(config_name):
     app = Flask(__name__,instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     env = os.getenv('FLASK_ENV')
-
-    api = Api(app, prefix='/api/v2', version='2.0',
-            title='fsf', description='food delivery api')
-        
-    """swagger UI configurations"""
-    app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
-    app.config.SWAGGER_UI_OPERATION_ID = True
-    app.config.SWAGGER_UI_REQUEST_DURATION = True
+    
+    flasgger.Swagger(app)
 
     """We add JWT secret key constant"""
     app.config["JWT_SECRET_KEY"] = "k-i-z-z-a-n-a-o-m-e"

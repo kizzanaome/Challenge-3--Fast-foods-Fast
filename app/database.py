@@ -32,14 +32,13 @@ class Database:
                 password varchar NOT NULL,
                 is_admin BOOLEAN DEFAULT FALSE
             )""",
-
             """CREATE TABLE IF NOT EXISTS food_items(
                 food_id SERIAL PRIMARY KEY,
                 user_id INTEGER NOT NULL,
                 food_name varchar NOT NULL,
                 price INTEGER NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE)""",
-
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+            )""",
             """CREATE TABLE IF NOT EXISTS orders(
                 order_id SERIAL PRIMARY KEY,
                 user_id INTEGER NOT NULL,
@@ -57,44 +56,25 @@ class Database:
             print('tables created succesfully')
             self.cur.execute(command)
 
-    def fetch_all_users(self):
-        """ Fetches all user records from the database"""
-        try:
-            Sql = ("SELECT * FROM users;")
-            self.cur.execute(Sql)
-            rows = self.cur.fetchall()
-            return rows
-        except (Exception, psycopg2.DatabaseError)as Error:
-            raise Error
+    def create_item(self, sql):
+        self.cur.execute(sql)
+        return {'message': 'Created succesfully'}, 201
 
-    def insert_user_data(self, username, password):
-        try:
-            sql = "INSERT INTO users (username,password) VALUES( %s,%s)"
-            data = (username, password)
-            self.cur.execute(sql, data)
-            return {'message': 'user registered succesfully'}, 201
-        except Exception as e:
-            raise e
-            
-    def fetch_user(self, username):
-        try:
-            query = "SELECT * FROM users WHERE username=%s"
-            self.cur.execute(query, (username,))
-            user = self.cur.fetchone()
-            username = user['username']
-            password = user['password']
-            print(username, password)
-            return username, password
-        except Exception as e:
-            return {'msg': 'user not found'}, 404
+    def check_item_exists(self, query):
+        self.cur.execute(query)
+        result = self.cur.fetchone()
+        if result:
+            return True
+        return False
 
-        
+    def fetch_user(self, sql):
+        self.cur.execute(sql)
+        result = self.cur.fetchone()
+        return result
+
     def drop_table(self, *table_names):
-        ''' Drops the tables created '''
+        '''Drops the tables created '''
         for table_name in table_names:
             drop_table = "DROP TABLE IF EXISTS {} CASCADE".format(table_name)
             print('all tables dropped')
             self.cur.execute(drop_table)
-
-
-

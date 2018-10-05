@@ -7,10 +7,10 @@ def admin_only(f):
     def decorated(*args, **kwargs):
         current_user = get_jwt_identity()
         user =User.fetch_user_by_id(current_user)
-        print(user)
         admin =user['is_admin'] == True
         if admin:
             return f(*args, **kwargs)
         else:
             return {'message':'You can not acces this end point'},401
     return decorated
+    

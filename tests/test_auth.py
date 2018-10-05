@@ -2,12 +2,11 @@ import unittest
 from app import create_app
 from flask import current_app as app
 import json
-from app.orders.models import Order
 from app.database import Database
 from .test_data import *
 
 class BaseCase(unittest.TestCase):
-    """class holds all the unittests for the auth endpoints"""
+    """class holds all the unittests for the endpoints"""
 
     def setUp(self):
         """
@@ -60,8 +59,22 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('you have succesfully signed up', str(response.data))
 
+     
+    def tearDown(self):
+        """method for rearing down the tables whenever a test is completed"""
+        print('------Tearingdown----------------------')
+        self.db.drop_table('users','orders','food_items') 
+
+
+    
+    def test_user_for_existing_user(self):
+        response = self.create_valid_user()
+        response = self.create_valid_user()
+        self.assertEqual(response.status_code, 403)
+        # self.assertIn('you have succesfully signed up', str(response.data))
+
     def test_invalid_signup_input(self):
-        """method for posting a an order """
+        """method for  testing post a an order  endpoint"""
 
         response = self.client.post(
             'api/v1/auth/asignup', data=json.dumps(invalid_user), content_type='application/json')
@@ -84,6 +97,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('you have succesfully signed up', str(response.data))
 
+     
     def test_user_login(self):
         """method for testing user_login endpoint"""
         self.create_valid_user()
@@ -137,11 +151,4 @@ class BaseCase(unittest.TestCase):
         response = self.client.get('api/v1/users/orders', content_type='application/json', 
                                                     headers={'Authorization': self.get_token()})
         self.assertEqual(response.status_code, 200)
-    
-
-      
-    
-    def tearDown(self):
-        """method for rearing down the tables whenever a test is completed"""
-        print('------Tearingdown----------------------')
-        self.db.drop_table('users','orders','food_items')
+   

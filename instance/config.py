@@ -1,11 +1,12 @@
 import os
-class BaseConfig:
 
+class BaseConfig:
     DATABASE_URL = 'postgresql://postgres:1460@localhost:5432/fast_food_db'
     DEBUG = True
     DB = 'fast_food_db'
 
 class DevelopmentConfig(BaseConfig):
+    DATABASE_URL = 'postgresql://postgres:1460@localhost:5432/fast_food_db'
     DEBUG = True
     DB = 'fast_food_db'
 
@@ -27,5 +28,4 @@ app_config = {
     "development": DevelopmentConfig,
     "production": ProductionConfig,
     "testing": TestingConfig
-
 }

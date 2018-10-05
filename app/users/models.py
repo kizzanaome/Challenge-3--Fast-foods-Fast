@@ -5,19 +5,20 @@ import psycopg2.extras as naome
 from flask_restplus import Api
 import psycopg2
 
-class User(Database):    
+db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
+
+class User:    
     """This class handles database transactions for the user"""
     def __init__(self, username,password, is_admin=False):
         self.username = username
         self.password=password
         self.is_admin= is_admin
-        Database.__init__(self,app.config['DATABASE_URL'])
 
     def insert_user_data(self,username, password, is_admin):
         try:
             sql = "INSERT INTO users (username,password,is_admin) VALUES(%s, %s,%s)"
             data = (username,password, is_admin)   
-            user=self.cur.execute(sql,data)
+            user=db.cur.execute(sql,data)
             print(user)
             return {'message':'user registered succesfully'},201
         except Exception as e:
@@ -27,7 +28,7 @@ class User(Database):
         try:
             sql = "INSERT INTO users (username,password, is_admin) VALUES( %s,%s,%s)"
             data = (username,password,is_admin)   
-            user=self.cur.execute(sql,data)
+            user=db.cur.execute(sql,data)
             print(user)
             return {'message':'user registered succesfully'},201
         except Exception as e:
@@ -36,8 +37,8 @@ class User(Database):
     def fetch_user(self, username):
         try:
             query = "SELECT * FROM users WHERE username=%s"
-            self.cur.execute(query, (username,))
-            user = self.cur.fetchone()
+            db.cur.execute(query, (username,))
+            user = db.cur.fetchone()
             print(user)
             return user
         except Exception as e:
@@ -46,8 +47,8 @@ class User(Database):
     
     def check_user(self, username):
         query = "SELECT * FROM users WHERE username=%s"
-        self.cur.execute(query, (username,))
-        user = self.cur.fetchone()
+        db.cur.execute(query, (username,))
+        user = db.cur.fetchone()
         print(user)
         if user:
             return True
@@ -58,8 +59,8 @@ class User(Database):
         """ Fetches all user records from the database"""
         try:                  
             Sql = ("SELECT * FROM users;") 
-            self.cur.execute(Sql)   
-            rows = self.cur.fetchall() 
+            db.cur.execute(Sql)   
+            rows = db.cur.fetchall() 
             print(rows)                
             return rows         
         except (Exception, psycopg2.DatabaseError)as Error:

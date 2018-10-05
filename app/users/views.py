@@ -9,7 +9,7 @@ import psycopg2
 from app.database import Database
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, get_jwt_claims)
-
+from flasgger import swag_from
 
 class Register(Resource):
     def get(self):
@@ -21,7 +21,8 @@ class Register(Resource):
             return make_response(jsonify({"users": rows}), 200)
         except (Exception, psycopg2.DatabaseError)as Error:
             print(Error)
-
+    
+    @swag_from("../docs/signup.yml")
     def post(self):
         try:
             parser = reqparse.RequestParser()
@@ -32,17 +33,17 @@ class Register(Resource):
             password = generate_password_hash(
                 args['password'], method='sha256')
             if not args['username']:
-                return make_response(jsonify({"message":"Username field is required"}), 400) 
-            if re.compile('^[1234567890]+$').match(args['username']):
-                return make_response(jsonify({"message":"This field is a string"}), 400) 
-            if re.compile('[   text]').match(args['username']):
+                return {"message":"Username field is required"}, 400 
+            if re.compile('^[0-9]+$').match(args['username']):
+                return {"message":"This field is a string"}, 400
+            if ' ' in args['username']:
                 return {'message': 'Please avoid adding spaces before characters'}, 400
 
-            if re.compile('[   text]').match(args['password']):
+            if ' ' in args['password']:
                 return {'message': 'Please avoid adding spaces before characters'}, 400
 
-            if re.compile('[!@#$%^&*:;?><.]').match(args['username']):
-                return {'message': 'Please dont input symbols'}, 400
+            if not re.compile('^[a-zA-Z]+$').match(args['username']):
+                return {'message': 'Username should be in characters'}, 400
 
             if len(str(args['username'])) < 4:
                 return {'message': 'username should be more than 4 characters'}, 400
@@ -56,7 +57,7 @@ class Register(Resource):
             username = args['username'].strip(chars)
             user = use.check_user(username)            
             if user:
-                return {'message': 'Username already exists'}, 403
+                return make_response(jsonify({'message': 'Username already exists'}), 403)
             use.insert_user_data(args['username'].strip(chars), password, is_admin=False)
             return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
         except Exception as e:
@@ -77,21 +78,22 @@ class AdminSignIn(Resource):
                 args['password'], method='sha256')
             
             if not args['username']:
-                return make_response(jsonify({"message":
-                                              "Username field is required"}),
-                                     401)
+                return {"message":"Username field is required"},401
+
             if not args['password']:
-                return make_response(jsonify({"message":
-                                              "Password field is required"}),
-                                     401)
-            if re.compile('[   text]').match(args['username']):
-                return {'message': 'Please avoid adding spaces before characters'}, 400
+                return {"message":"Password field is required"},401
+            
+            if ' ' in args['username']:
+                return {'message': 'Please avoid adding spaces'}, 400
 
-            if re.compile('[   text]').match(args['password']):
-                return {'message': 'Please avoid adding spaces before characters'}, 400
+            if ' ' in args['password']:
+                return {'message': 'Please avoid adding spaces'}, 400
 
-            if re.compile('[!@#$%^&*:;?><.]').match(args['username']):
-                return {'message': 'Please dont input symbols'}, 400
+            if not re.compile('^[a-zA-Z]+$').match(args['username']):
+                return {'message': 'Username should be in characters'}, 400
+
+            if not re.compile('^[a-zA-Z]+$').match(args['password']):
+                return {'message': 'Username should be in characters'}, 400
 
             if len(str(args['username'])) < 4:
                 return {'message': 'username should be more than 4 characters'}, 400
@@ -101,17 +103,16 @@ class AdminSignIn(Resource):
 
             """creating an insatnce of a user class"""
             use = User(args['username'], args['password'], is_admin=True)
+
             user = use.check_user(args['username'])
-            
             if user:
                 return {'message': 'Username already exists'}, 403
-            create_user = use.insert_user_admin(
+            use.insert_user_admin(
                 args['username'], password, is_admin=True)
-            if create_user:
-                return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
+            return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
         except Exception as e:
             raise e
-            return {'massage': 'username already exists'}, 400
+        
 
 
 class Login(Resource):
@@ -132,14 +133,18 @@ class Login(Resource):
             return make_response(jsonify({"message":
                                             "Password field is required"}),
                                     401)
-        if re.compile('[   text]').match(data['username']):
-            return {'message': 'Please avoid adding spaces before characters'}, 400
 
-        if re.compile('[   text]').match(data['password']):
-            return {'message': 'Please avoid adding spaces before characters'}, 400
+        if ' ' in data['username']:
+            return {'message': 'Please avoid adding spaces'}, 400
 
-        if re.compile('[!@#$%^&*:;?><.]').match(data['username']):
-            return {'message': 'Please dont input symbols'}, 400
+        if ' ' in data['password']:
+            return {'message': 'Please avoid adding spaces'}, 400
+
+        if not re.compile('^[a-zA-Z]+$').match(data['username']):
+            return {'message': 'Username should be in characters'}, 400
+
+        if not re.compile('^[a-zA-Z]+$').match(data['password']):
+            return {'message': 'Username should be in characters'}, 400
 
         if len(str(data['username'])) < 4:
             return {'message': 'username should be more than 4 characters'}, 400
@@ -162,4 +167,4 @@ class Login(Resource):
             user_token["token"] = access_token
             return user_token, 200
         else:
-            return {'message': 'Invalid credentials'}, 401
+            return {'message': 'Invalid credentials'}, 401  
