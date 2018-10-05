@@ -9,7 +9,7 @@ import psycopg2
 from app.database import Database
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, get_jwt_claims)
-from flasgger import swag_from
+
 
 class Register(Resource):
     def get(self):
@@ -22,7 +22,7 @@ class Register(Resource):
         except (Exception, psycopg2.DatabaseError)as Error:
             print(Error)
     
-    @swag_from("../docs/signup.yml")
+    
     def post(self):
         try:
             parser = reqparse.RequestParser()
