@@ -22,7 +22,7 @@ class Register(Resource):
         except (Exception, psycopg2.DatabaseError)as Error:
             print(Error)
     
-    @swag_from("../docs/signup.yml")
+
     def post(self):
         try:
             parser = reqparse.RequestParser()
@@ -106,10 +106,11 @@ class AdminSignIn(Resource):
 
             user = use.check_user(args['username'])
             if user:
-                return {'message': 'Username already exists'}, 403
-            use.insert_user_admin(
-                args['username'], password, is_admin=True)
-            return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
+                return {'message': 'Username already exists'}, 400
+            else:
+                use.insert_user_admin(
+                    args['username'], password, is_admin=True)
+                return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
         except Exception as e:
             raise e
         

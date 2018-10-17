@@ -5,6 +5,7 @@ import psycopg2.extras as naome
 from flask_restplus import Api
 import psycopg2
 
+
 db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
 
 class User:    
@@ -34,26 +35,20 @@ class User:
         except Exception as e:
             raise e
                         
-    def fetch_user(self, username):
-        try:
-            query = "SELECT * FROM users WHERE username=%s"
-            db.cur.execute(query, (username,))
-            user = db.cur.fetchone()
-            print(user)
-            return user
-        except Exception as e:
-            return {'msg': 'user not found'}, 404
-
+    def fetch_user(self, username):  
+        query = "SELECT * FROM users WHERE username=%s"
+        db.cur.execute(query, (username,))
+        user = db.cur.fetchone()
+        print(user)
+        return user
     
     def check_user(self, username):
         query = "SELECT * FROM users WHERE username=%s"
         db.cur.execute(query, (username,))
         user = db.cur.fetchone()
-        print(user)
         if user:
             return True
         return False
-
 
     def fetch_all_users(self):
         """ Fetches all user records from the database"""

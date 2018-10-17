@@ -8,7 +8,15 @@ import psycopg2.extras as naome
 
 class Database:
     """This class connects to the database"""
+
     def __init__(self, database_url):
+
+        """
+            The URL parse function focus on splitting
+            a URL string into its components, or on 
+            combining URL components into a URL string.
+
+        """
         parsed_url = urlparse(database_url)
         db = parsed_url.path[1:]
         username = parsed_url.username
@@ -56,21 +64,6 @@ class Database:
             print('tables created succesfully')
             self.cur.execute(command)
 
-    def create_item(self, sql):
-        self.cur.execute(sql)
-        return {'message': 'Created succesfully'}, 201
-
-    def check_item_exists(self, query):
-        self.cur.execute(query)
-        result = self.cur.fetchone()
-        if result:
-            return True
-        return False
-
-    def fetch_user(self, sql):
-        self.cur.execute(sql)
-        result = self.cur.fetchone()
-        return result
 
     def drop_table(self, *table_names):
         '''Drops the tables created '''

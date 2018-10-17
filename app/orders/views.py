@@ -71,7 +71,7 @@ class OrderList(Resource):
             order = Order(current_user,fd['food_id'],args['quantity'], args['location'],status)
             select_order=order.fetch_food_id(fd['food_id'])   
             if select_order:
-                    return {'message':'Order has already been placed'},403
+                    return {'message':'Order has already been placed'},400
             create_order=order.insert_order_data()
             if create_order:
                 return {'massege':"you have succesfully placed order"},201
