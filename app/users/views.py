@@ -11,7 +11,6 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, get_jwt_claims)
 
 
-
 class Register(Resource):
     def get(self):
         try:
