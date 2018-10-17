@@ -1,7 +1,7 @@
 user = {
 
-    'username': 'noma',
-    'password': 'noma'
+    'username':'nomanaome',
+    'password':'nomanaome'
 }
 
 invalid_user ={
@@ -28,4 +28,3 @@ token ={
 updated_status={
     "status":"Accepted"
 }
-
