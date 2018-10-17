@@ -3,9 +3,11 @@ from instance.config import app_config
 from flask_restplus import Api
 import os
 from flask_cors import CORS
+from flasgger import Swagger
 
 def create_app(config_name):
     app = Flask(__name__,instance_relative_config=True)
+    Swagger(app)
 
     """ Add cors for cross origin resource sharing"""
     CORS(app)
