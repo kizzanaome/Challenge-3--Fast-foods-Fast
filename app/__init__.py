@@ -2,7 +2,6 @@ from flask import Flask, render_template, jsonify
 from instance.config import app_config
 from flask_restplus import Api
 import os
-import flasgger
 from flask_cors import CORS
 
 def create_app(config_name):
@@ -10,14 +9,12 @@ def create_app(config_name):
 
     """ Add cors for cross origin resource sharing"""
     CORS(app)
+    app.config['CORS_HEADERS'] = 'Content-Type'
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     env = os.getenv('FLASK_ENV')
 
    
-    
-    flasgger.Swagger(app)
-
     """We add JWT secret key constant"""
     app.config["JWT_SECRET_KEY"] = "k-i-z-z-a-n-a-o-m-e"
 
