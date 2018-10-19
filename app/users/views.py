@@ -157,7 +157,7 @@ class Login(Resource):
             user_token = {}
             access_token = create_access_token(identity=user['user_id'])
             user_token["token"] = access_token
+            user_token["message"]='You have succesfully logged in'
             return user_token, 200
-            return {'message':'You have succesfully logged in'}, 200
         else:
             return {'message': 'Invalid credentials'}, 401
