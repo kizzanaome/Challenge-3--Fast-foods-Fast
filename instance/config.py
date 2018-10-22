@@ -6,9 +6,9 @@ class BaseConfig:
     DB = 'fast_food_db'
 
 class DevelopmentConfig(BaseConfig):
-    DATABASE_URL = 'postgresql://postgres:1460@localhost:5432/fast_food_db'
+    # DATABASE_URL = 'postgresql://postgres:1460@localhost:5432/fast_food_db'
     DEBUG = True
-    DB = 'fast_food_db'
+    # DB = 'fast_food_db'
 
 class TestingConfig(BaseConfig):
     if os.getenv('TRAVIS'):

@@ -57,7 +57,7 @@ class Register(Resource):
             username = args['username'].strip(chars)
             user = use.check_user(username)            
             if user:
-                return make_response(jsonify({'message': 'Username already exists'}), 403)
+                return make_response(jsonify({'message': 'Username already exists'}), 409)
             use.insert_user_data(args['username'].strip(chars), password, is_admin=False)
             return make_response(jsonify({'message': "you have succesfully signed up"}), 201)
         except Exception as e:
@@ -106,7 +106,7 @@ class AdminSignIn(Resource):
 
             user = use.check_user(args['username'])
             if user:
-                return {'message': 'Username already exists'}, 400
+                return {'message': 'Username already exists'}, 409
             else:
                 use.insert_user_admin(
                     args['username'], password, is_admin=True)
@@ -166,6 +166,8 @@ class Login(Resource):
             user_token = {}
             access_token = create_access_token(identity=user['user_id'])
             user_token["token"] = access_token
+            user_token["message"]='You have succesfully logged in'
             return user_token, 200
+            
         else:
             return {'message': 'Invalid credentials'}, 401  

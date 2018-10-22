@@ -7,4 +7,4 @@ app = create_app(config_name)
 if __name__ == '__main__':
     db.create_tables()
     # db.drop_table('users','orders','food_items')
-    app.run()
+    app.run(port=8000)

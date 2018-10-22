@@ -74,7 +74,7 @@ class OrderList(Resource):
                     return {'message':'Order has already been placed'},400
             create_order=order.insert_order_data()
             if create_order:
-                return {'massege':"you have succesfully placed order"},201
+                return {'message':"you have succesfully placed order"},201
             return {"msg": "Order not placed succesfully"}, 
         return {"msg": "food_item doesnt exist on the food menu"}, 404
 
