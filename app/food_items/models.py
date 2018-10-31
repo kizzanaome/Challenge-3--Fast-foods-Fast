@@ -7,7 +7,7 @@ import psycopg2
 """
     Global variable db holds the db instance
 """
-db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
+# db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
 
 
 class Food():
@@ -24,7 +24,9 @@ class Food():
     def create_foodItems(self):
         """
             This method inserts data into the food_items tables
-        """        
+        """    
+        db = Database(app.config['DATABASE_URL'])
+
         try:
             sql = "INSERT INTO food_items (user_id,food_name,price) VALUES(%s,%s,%s)"
             data = (self.user_id,self.food_name,self.price) 
@@ -35,6 +37,8 @@ class Food():
             raise e
 
     def check_food_name(self, food_name):
+        db = Database(app.config['DATABASE_URL'])
+
         query = "SELECT * FROM food_items WHERE food_name=%s"
         db.cur.execute(query, (food_name,))
         user = db.cur.fetchone()
@@ -47,6 +51,8 @@ class Food():
     @staticmethod
     def fetch_all_food_items():
         """ Fetches all food_items records from the database"""
+        db = Database(app.config['DATABASE_URL'])
+
         try:                  
             Sql = ("SELECT * FROM food_items;") 
             db.cur.execute(Sql)   
@@ -58,6 +64,8 @@ class Food():
     @staticmethod
     def fetch_food_name_and_price():
         """ Fetches all food_items records from the database"""
+        db = Database(app.config['DATABASE_URL'])
+
         try:                  
             Sql = ("SELECT  food_name, price FROM food_items") 
             db.cur.execute(Sql)   

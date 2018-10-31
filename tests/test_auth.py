@@ -55,17 +55,17 @@ class BaseCase(unittest.TestCase):
         return response
 
 
-    # def test_user_resgistration(self):
-    #     response = self.create_valid_user()
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertIn('you have succesfully signed up', str(response.data))    
+    def test_user_resgistration(self):
+        response = self.create_valid_user()
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('you have succesfully signed up', str(response.data))    
 
 
-    # def test_user_for_existing_user(self):
-    #     response = self.create_valid_user()
-    #     response = self.create_valid_user()
-    #     self.assertEqual(response.status_code, 403)
-    #     # self.assertIn('you have succesfully signed up', str(response.data))
+    def test_user_for_existing_user(self):
+        response = self.create_valid_user()
+        response = self.create_valid_user()
+        self.assertEqual(response.status_code, 409)
+        # self.assertIn('you have succesfully signed up', str(response.data))
 
     def test_invalid_signup_input(self):
         """method for  testing post a an order  endpoint"""
@@ -84,12 +84,12 @@ class BaseCase(unittest.TestCase):
         self.assertIn('Username field is required"', str(response.data))
 
 
-    # def test_admin_registration(self):
-    #     """method for testing an admin signup"""
-    #     response = self.client.post(
-    #         'api/v1/auth/asignup', data=json.dumps(user), content_type='application/json')
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertIn('you have succesfully signed up', str(response.data))
+    def test_admin_registration(self):
+        """method for testing an admin signup"""
+        response = self.client.post(
+            'api/v1/auth/asignup', data=json.dumps(user), content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('you have succesfully signed up', str(response.data))
 
      
     def test_user_login(self):
@@ -111,32 +111,32 @@ class BaseCase(unittest.TestCase):
                                              self.get_token()})
         self.assertEqual(response.status_code, 200)
     
-    # def test_place_a_food_items(self):
-    #     self.create_valid_user()
-    #     response = self.client.post('api/v1/menu', data=json.dumps(menu), content_type='application/json',
-    #                                 headers={'Authorization': self.get_token()})
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertIn('you have succesfully placed a food_item', str(response.data))
+    def test_place_a_food_items(self):
+        self.create_valid_user()
+        response = self.client.post('api/v1/menu', data=json.dumps(menu), content_type='application/json',
+                                    headers={'Authorization': self.get_token()})
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('you have succesfully placed a food_item', str(response.data))
 
         
-    # def test_fetch_a_single_order(self):
-    #     self.create_valid_user()
-    #     self.post_menu()
-    #     self.place_an_order()
-    #     response = self.client.get('api/v1/orders/1', data=json.dumps(order), content_type='application/json',
-    #                                headers={'Authorization': self.get_token()})
-    #     self.assertEqual(response.status_code, 200)
+    def test_fetch_a_single_order(self):
+        self.create_valid_user()
+        self.post_menu()
+        self.place_an_order()
+        response = self.client.get('api/v1/orders/1', data=json.dumps(order), content_type='application/json',
+                                   headers={'Authorization': self.get_token()})
+        self.assertEqual(response.status_code, 200)
         
 
-    # def test_update_order_status(self):
-    #     self.create_valid_user()
-    #     self.post_menu()
-    #     self.place_an_order()
-    #     response = self.client.put('api/v1/orders/1',
-    #                                content_type='application/json', data=json.dumps(updated_status),
-    #                                headers={'Authorization': self.get_token()})
-    #     self.assertEqual(response.status_code, 201)
-    #     self.assertIn("status updated succesfully", str(response.data))
+    def test_update_order_status(self):
+        self.create_valid_user()
+        self.post_menu()
+        self.place_an_order()
+        response = self.client.put('api/v1/orders/1',
+                                   content_type='application/json', data=json.dumps(updated_status),
+                                   headers={'Authorization': self.get_token()})
+        self.assertEqual(response.status_code, 201)
+        self.assertIn("Order has been accepted", str(response.data))
 
     def test_get_order_history_doesnt_exist(self):
         self.create_valid_user()

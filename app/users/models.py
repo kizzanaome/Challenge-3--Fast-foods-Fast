@@ -6,17 +6,20 @@ from flask_restplus import Api
 import psycopg2
 
 
-db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
+# db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
 
-class User:    
+class User():    
     """This class handles database transactions for the user"""
     def __init__(self, username,password, is_admin=False):
         self.username = username
         self.password=password
         self.is_admin= is_admin
+        
 
     def insert_user_data(self,username, password, is_admin):
         try:
+            db = Database(app.config['DATABASE_URL'])
+
             sql = "INSERT INTO users (username,password,is_admin) VALUES(%s, %s,%s)"
             data = (username,password, is_admin)   
             user=db.cur.execute(sql,data)
@@ -27,6 +30,8 @@ class User:
 
     def insert_user_admin(self,username, password,is_admin):
         try:
+            db = Database(app.config['DATABASE_URL'])
+
             sql = "INSERT INTO users (username,password, is_admin) VALUES( %s,%s,%s)"
             data = (username,password,is_admin)   
             user=db.cur.execute(sql,data)
@@ -36,6 +41,8 @@ class User:
             raise e
                         
     def fetch_user(self, username):  
+        db = Database(app.config['DATABASE_URL'])
+
         query = "SELECT * FROM users WHERE username=%s"
         db.cur.execute(query, (username,))
         user = db.cur.fetchone()
@@ -43,6 +50,8 @@ class User:
         return user
     
     def check_user(self, username):
+        db = Database(app.config['DATABASE_URL'])
+
         query = "SELECT * FROM users WHERE username=%s"
         db.cur.execute(query, (username,))
         user = db.cur.fetchone()
@@ -52,7 +61,9 @@ class User:
 
     def fetch_all_users(self):
         """ Fetches all user records from the database"""
-        try:                  
+        try:                
+            db = Database(app.config['DATABASE_URL'])
+  
             Sql = ("SELECT * FROM users;") 
             db.cur.execute(Sql)   
             rows = db.cur.fetchall() 
