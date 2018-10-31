@@ -1,7 +1,7 @@
 from app import create_app
 from app.database  import Database
 config_name = "production"
-db = Database('postgres://cnvubaunffnlsa:2639efa048a47a8de9efa076d2912fe6a7de075896b82ef48971bf4f799830b4@ec2-54-221-225-11.compute-1.amazonaws.com:5432/d35aprkl2ds50e')
+db = Database('postgres://diryjyzvjynvec:ccedd1fbfa7da622aa1da72b26fa2c117623172cd7df4f5090c0040bcba41244@ec2-107-20-211-10.compute-1.amazonaws.com:5432/d2gutubl34hhni')
 app = create_app(config_name)
 
 if __name__ == '__main__':

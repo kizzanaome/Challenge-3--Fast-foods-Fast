@@ -14,11 +14,12 @@ import flasgger
 class OrderList(Resource):
     @jwt_required
     def get(self):
-            orders=Order.order_history()
+            current_user = get_jwt_identity()
+            orders=Order.order_history(current_user)
             print(orders)
             if not orders:
                 return {"msg": "You have not orderd for any food so you have no order history"}, 200 
-            return make_response(jsonify({"Your order History": orders}),200)  
+            return make_response(jsonify({"Your_order_History": orders}),200)  
 
     @jwt_required
     def post(self):
@@ -69,7 +70,7 @@ class OrderList(Resource):
         if fd:
             """creating an insatnce of an order class"""
             order = Order(current_user,fd['food_id'],args['quantity'], args['location'],status)
-            select_order=order.fetch_food_id(fd['food_id'])   
+            select_order=order.fetch_food_id(fd['food_id'],current_user)   
             if select_order:
                     return {'message':'Order has already been placed'},400
             create_order=order.insert_order_data()
@@ -105,9 +106,9 @@ class SingleOrder(Resource):
             return {'message': 'Please avoid adding spaces'}, 400
         update_status= Order.update_status(status, order_id)
         if update_status:
-            if status != 'Accepted':
-                return {'message':'Invalid status input'},400
-            return {'message':'status updated succesfully'}, 201
+            if status == 'Accepted':
+                return {'message':'Order has been accepted'},201
+            return {'message':'order has been Rejected'}, 201
         return {'message':'Failed to update status'},400
         
 
@@ -119,7 +120,7 @@ class AdminOrderView(Resource):
             print(orders)
             if not orders:
                 return {"msg": " There are no orders at the moment"}, 200 
-            return {"Available_orders": orders},200  
+            return make_response(jsonify({"Available_orders": orders}),200) 
 
    
      

@@ -35,7 +35,7 @@ class Order:
             raise e
     
     def single_order(self, order_id):
-        query = """SELECT  od.quantity, od.status, od.location, od.CREATED_AT,od.order_id,
+        query = """SELECT  od.quantity, od.status, od.location, od.CREATED_AT,od.order_id,usr.username,
                      f.price, f.food_name from orders 
                      as od JOIN food_items as f ON od.food_id=f.food_id JOIN 
                      users as usr ON  od.user_id=usr.user_id where order_id ='{}'""".format(order_id)
@@ -59,11 +59,11 @@ class Order:
             raise Error
 
     @staticmethod
-    def order_history():
+    def order_history(user_id):
         Sql = """SELECT  od.order_id, od.quantity, od.status,od.location,od.CREATED_AT,
                     f.price, f.food_name, usr.username from orders 
                     as od JOIN food_items as f ON od.food_id=f.food_id JOIN
-                    users as usr ON od.user_id=usr.user_id;"""
+                    users as usr ON od.user_id=usr.user_id where od.user_id ='{}' """.format(user_id)
         db.cur.execute(Sql)
         rows = db.cur.fetchall()
         return rows
@@ -105,9 +105,9 @@ class Order:
         return updated_rows
 
     @staticmethod
-    def fetch_food_id(food_id):
-        query = "SELECT * FROM orders WHERE food_id=%s"
-        db.cur.execute(query, (food_id,))
+    def fetch_food_id(food_id, user_id):
+        query = "SELECT * FROM orders WHERE food_id=%s and user_id=%s"
+        db.cur.execute(query, (food_id,user_id))
         orders = db.cur.fetchone()
         return orders
 

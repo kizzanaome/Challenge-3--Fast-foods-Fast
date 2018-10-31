@@ -55,10 +55,10 @@ class BaseCase(unittest.TestCase):
         return response
 
 
-    def test_user_resgistration(self):
-        response = self.create_valid_user()
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('you have succesfully signed up', str(response.data))    
+    # def test_user_resgistration(self):
+    #     response = self.create_valid_user()
+    #     self.assertEqual(response.status_code, 201)
+    #     self.assertIn('you have succesfully signed up', str(response.data))    
 
 
     # def test_user_for_existing_user(self):
