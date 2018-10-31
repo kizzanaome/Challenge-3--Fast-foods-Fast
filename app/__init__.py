@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify
 from instance.config import app_config
-from flask_restplus import Api
 import os
 from flask_cors import CORS
 from flasgger import Swagger
