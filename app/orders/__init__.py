@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import Api
+from flask_restplus import Api
 from .views import OrderList,SingleOrder,AdminOrderView
 
 orders = Blueprint('orders', __name__, url_prefix='/api/v1')

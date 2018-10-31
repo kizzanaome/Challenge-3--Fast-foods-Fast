@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask_restful import Api
+from flask_restplus import Api
 from .views import Register,Login, AdminSignIn
 
 users = Blueprint('users', __name__, url_prefix='/api/v1')
