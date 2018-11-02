@@ -43,25 +43,25 @@ class OrderList(Resource):
                             help="The location field cant be empty")
         args=parser.parse_args()
 
-        if not args['food_name']:
-            return {"message": "Add food_name"}, 400
+        # if not args['food_name']:
+        #     return {"message": "Add food_name"}, 400
 
-        if args['location'] == "":
-            return {"message": "Add location"},400
-        if ' ' in args['food_name']:
-                return {'message': 'Please avoid adding spaces'}, 400
+        # if args['location'] == "":
+        #     return {"message": "Add location"},400
+        # if ' ' in args['food_name']:
+        #         return {'message': 'Please avoid adding spaces'}, 400
 
-        if ' ' in args['location']:
-            return {'message': 'Please avoid adding spaces'}, 400
+        # if ' ' in args['location']:
+        #     return {'message': 'Please avoid adding spaces'}, 400
 
-        if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
-            return {'message': 'food_name should be in characters'}, 400
+        # if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
+        #     return {'message': 'food_name should be in characters'}, 400
 
-        if not re.compile('^[a-zA-Z]+$').match(args['location']):
-            return {'message': 'location should be in characters'}, 400
+        # if not re.compile('^[a-zA-Z]+$').match(args['location']):
+        #     return {'message': 'location should be in characters'}, 400
    
-        if len(str(args['food_name'])) < 4:
-            return {'message': 'food_name should be more than 4 characters'}, 400
+        # if len(str(args['food_name'])) < 4:
+        #     return {'message': 'food_name should be more than 4 characters'}, 400
         status = "pending"
         chars = string.whitespace + string.punctuation + string.digits
         food_name = args['food_name'].strip(chars)
