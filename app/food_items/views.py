@@ -40,18 +40,6 @@ class FoodItems(Resource):
                             help="Price cant be coverted ")
         args = parser.parse_args()
 
-        # if not args['food_name']:
-        #     return make_response(jsonify({"message": "Add food_name"}),400)       
-        # if args['price'] == "":
-        #     return make_response(jsonify({"message":"Add price"}),400) 
-        # if ' ' in args['food_name']:
-        #     return {'message': 'Please avoid adding spaces before characters'}, 400
-        # if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
-        #     return {'message': 'foodname should be in characters'}, 400
-            
-        # if len(str(args['food_name'])) < 4:
-        #     return {'message': 'food_name should be more than 4 characters'}, 400
-
         """creating an insatnce of a food_items class"""
         chars = string.whitespace + string.punctuation + string.digits
         food = Food(current_user,args["food_name"].strip(chars), args["price"])
