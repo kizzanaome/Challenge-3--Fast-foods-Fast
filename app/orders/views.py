@@ -104,7 +104,7 @@ class SingleOrder(Resource):
 
         if ' ' in args['status']:
             return {'message': 'Please avoid adding spaces'}, 400
-        update_status= Order.update_status(status, order_id)
+        update_status = Order.update_status(status, order_id)
         if update_status:
             if status == 'Accepted':
                 return {'message':'Order has been accepted'},201

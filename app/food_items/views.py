@@ -40,17 +40,17 @@ class FoodItems(Resource):
                             help="Price cant be coverted ")
         args = parser.parse_args()
 
-        if not args['food_name']:
-            return make_response(jsonify({"message": "Add food_name"}),400)       
-        if args['price'] == "":
-            return make_response(jsonify({"message":"Add price"}),400) 
-        if ' ' in args['food_name']:
-            return {'message': 'Please avoid adding spaces before characters'}, 400
-        if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
-            return {'message': 'foodname should be in characters'}, 400
+        # if not args['food_name']:
+        #     return make_response(jsonify({"message": "Add food_name"}),400)       
+        # if args['price'] == "":
+        #     return make_response(jsonify({"message":"Add price"}),400) 
+        # if ' ' in args['food_name']:
+        #     return {'message': 'Please avoid adding spaces before characters'}, 400
+        # if not re.compile('^[a-zA-Z]+$').match(args['food_name']):
+        #     return {'message': 'foodname should be in characters'}, 400
             
-        if len(str(args['food_name'])) < 4:
-            return {'message': 'food_name should be more than 4 characters'}, 400
+        # if len(str(args['food_name'])) < 4:
+        #     return {'message': 'food_name should be more than 4 characters'}, 400
 
         """creating an insatnce of a food_items class"""
         chars = string.whitespace + string.punctuation + string.digits
@@ -62,6 +62,24 @@ class FoodItems(Resource):
         if create_food:
             return make_response(jsonify({'message':"you have succesfully placed a food_item"}),201)
         return {"msg": "food_item not placed succesfully"}, 400
+
+
+    
+class SingleMenu(Resource):
+    @jwt_required
+    @admin_only
+    def delete(self, food_id):   
+        current_user = get_jwt_identity()
+        if food_id:
+            food = Food(current_user,"food_name", "price")
+            food.delete_food_items(food_id)
+            return make_response(jsonify({'message': "item deleted"}),200)
+        # return {'msg': "Food "},200
+
+           
+
+
+             
 
 
 

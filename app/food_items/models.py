@@ -54,7 +54,7 @@ class Food():
         db = Database(app.config['DATABASE_URL'])
 
         try:                  
-            Sql = ("SELECT * FROM food_items;") 
+            Sql = ("SELECT * FROM food_items where food_id=%s;") 
             db.cur.execute(Sql)   
             rows = db.cur.fetchall()                 
             return rows         
@@ -67,10 +67,17 @@ class Food():
         db = Database(app.config['DATABASE_URL'])
 
         try:                  
-            Sql = ("SELECT  food_name, price FROM food_items") 
+            Sql = ("SELECT * FROM food_items") 
             db.cur.execute(Sql)   
             rows = db.cur.fetchall()  
             print(rows)               
             return rows         
         except (Exception, psycopg2.DatabaseError)as Error:
             raise Error
+
+    @staticmethod
+    def delete_food_items(food_id):
+        db = Database(app.config['DATABASE_URL'])
+        query = "DELETE FROM food_items WHERE food_id='{}' ".format(food_id)
+        db.cur.execute(query, (food_id),)
+      

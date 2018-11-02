@@ -33,23 +33,23 @@ class Register(Resource):
             args = parser.parse_args()
             password = generate_password_hash(
                 args['password'], method='sha256')
-            if not args['username']:
-                return {"message":"Username field is required"}, 400 
-            if re.compile('^[0-9]+$').match(args['username']):
-                return {"message":"This field is a string"}, 400
-            if ' ' in args['username']:
-                return {'message': 'Please avoid adding spaces before characters'}, 400
-            if ' ' in args['password']:
-                return {'message': 'Please avoid adding spaces before characters'}, 400
+            # if not args['username']:
+            #     return {"message":"Username field is required"}, 400 
+            # if re.compile('^[0-9]+$').match(args['username']):
+            #     return {"message":"This field is a string"}, 400
+            # if ' ' in args['username']:
+            #     return {'message': 'Please avoid adding spaces before characters'}, 400
+            # if ' ' in args['password']:
+            #     return {'message': 'Please avoid adding spaces before characters'}, 400
 
-            if not re.compile('^[a-zA-Z]+$').match(args['username']):
-                return {'message': 'Username should be in characters'}, 400
+            # if not re.compile('^[a-zA-Z]+$').match(args['username']):
+            #     return {'message': 'Username should be in characters'}, 400
 
-            if len(str(args['username'])) < 4:
-                return {'message': 'username should be more than 4 characters'}, 400
+            # if len(str(args['username'])) < 4:
+            #     return {'message': 'username should be more than 4 characters'}, 400
 
-            if len(str(args['password'])) < 4:
-                return {'message': 'password should be more than 4 characters'}, 400
+            # if len(str(args['password'])) < 4:
+            #     return {'message': 'password should be more than 4 characters'}, 400
 
             """creating an insatnce of the user class"""
             chars = string.whitespace + string.punctuation + string.digits
@@ -135,23 +135,23 @@ class Login(Resource):
                                             "Password field is required"}),
                                     401)
 
-        if ' ' in data['username']:
-            return {'message': 'Please avoid adding spaces'}, 400
+        # if ' ' in data['username']:
+        #     return {'message': 'Please avoid adding spaces'}, 400
 
-        if ' ' in data['password']:
-            return {'message': 'Please avoid adding spaces'}, 400
+        # if ' ' in data['password']:
+        #     return {'message': 'Please avoid adding spaces'}, 400
 
-        if not re.compile('^[a-zA-Z]+$').match(data['username']):
-            return {'message': 'Username should be in characters'}, 400
+        # if not re.compile('^[a-zA-Z]+$').match(data['username']):
+        #     return {'message': 'Username should be in characters'}, 400
 
-        if not re.compile('^[a-zA-Z]+$').match(data['password']):
-            return {'message': 'Username should be in characters'}, 400
+        # if not re.compile('^[a-zA-Z]+$').match(data['password']):
+        #     return {'message': 'Username should be in characters'}, 400
 
-        if len(str(data['username'])) < 4:
-            return {'message': 'username should be more than 4 characters'}, 400
+        # if len(str(data['username'])) < 4:
+        #     return {'message': 'username should be more than 4 characters'}, 400
 
-        if len(str(data['password'])) < 4:
-            return {'message': 'password should be more than 4 characters'}, 400
+        # if len(str(data['password'])) < 4:
+        #     return {'message': 'password should be more than 4 characters'}, 400
 
         """
             read from database to find the user and then check the password
