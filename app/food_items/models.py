@@ -7,8 +7,6 @@ import psycopg2
 """
     Global variable db holds the db instance
 """
-# db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
-
 
 class Food():
     def __init__(self, user_id,food_name,price):

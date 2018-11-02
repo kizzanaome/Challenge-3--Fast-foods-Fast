@@ -6,8 +6,6 @@ from flask_restplus import Api
 import psycopg2
 
 
-# db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
-
 class User():    
     """This class handles database transactions for the user"""
     def __init__(self, username,password, is_admin=False):

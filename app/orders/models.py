@@ -3,7 +3,7 @@ from flask import current_app as app
 import psycopg2.extras as naome
 import psycopg2
 
-db = Database('postgresql://postgres:1460@localhost:5432/fast_food_db')
+
 
 
 class Order:
@@ -24,6 +24,8 @@ class Order:
         """
             This method inserts data into the orders tables
         """          
+        db = Database(app.config['DATABASE_URL'])
+
         try:
             sql = "INSERT INTO orders (user_id,food_id,quantity,location,status) VALUES(%s,%s,%s,%s,%s)"
             data = (self.user_id, self.food_id,
@@ -35,6 +37,8 @@ class Order:
             raise e
     
     def single_order(self, order_id):
+        db = Database(app.config['DATABASE_URL'])
+
         query = """SELECT  od.quantity, od.status, od.location, od.CREATED_AT,od.order_id,usr.username,
                      f.price, f.food_name from orders 
                      as od JOIN food_items as f ON od.food_id=f.food_id JOIN 
@@ -48,6 +52,8 @@ class Order:
     @staticmethod
     def fetch_all_orders():
         """ Fetches all order records from the database"""
+        db = Database(app.config['DATABASE_URL'])
+
         try:
             Sql = """SELECT  od.quantity, od.status, od.location, od.CREATED_AT, od.order_id,
                      f.price, f.food_name, usr.username from orders as od JOIN food_items 
@@ -60,6 +66,7 @@ class Order:
 
     @staticmethod
     def order_history(user_id):
+        db = Database(app.config['DATABASE_URL'])
         Sql = """SELECT  od.order_id, od.quantity, od.status,od.location,od.CREATED_AT,
                     f.price, f.food_name, usr.username from orders 
                     as od JOIN food_items as f ON od.food_id=f.food_id JOIN
@@ -71,6 +78,7 @@ class Order:
    
     @staticmethod
     def fetch_single_food_id(food_id,):
+        db = Database(app.config['DATABASE_URL'])
         query = "SELECT * FROM food_items WHERE food_id ='{}'".format(food_id)
         db.cur.execute(query, (food_id),)
         fooditem = db.cur.fetchone()
@@ -79,6 +87,8 @@ class Order:
     @staticmethod
     def fetch_user_by_id(user_id):
         try:
+
+            db = Database(app.config['DATABASE_URL'])
             query = "SELECT * FROM users WHERE user_id=%s"
             db.cur.execute(query, (user_id,))
             user = db.cur.fetchone()
@@ -89,6 +99,8 @@ class Order:
 
     @staticmethod
     def fetch_foodname(food_name):
+
+        db = Database(app.config['DATABASE_URL'])
         query = "SELECT * FROM food_items WHERE food_name=%s"
         db.cur.execute(query, (food_name,))
         food = db.cur.fetchone()
@@ -96,6 +108,8 @@ class Order:
 
     @staticmethod
     def update_status(status, order_id):
+
+        db = Database(app.config['DATABASE_URL'])
         query = """UPDATE orders
                 SET status = %s
                 WHERE order_id = %s"""
@@ -108,6 +122,7 @@ class Order:
 
     @staticmethod
     def fetch_food_id(food_id, user_id):
+        db = Database(app.config['DATABASE_URL'])
         query = "SELECT * FROM orders WHERE food_id=%s and user_id=%s"
         db.cur.execute(query, (food_id,user_id))
         orders = db.cur.fetchone()
